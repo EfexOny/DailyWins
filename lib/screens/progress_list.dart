@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tracker/data/ProgressItem.dart';
 import 'package:tracker/main.dart';
+import 'package:tracker/screens/others/bigcard.dart';
+import 'package:tracker/screens/others/smallcard.dart';
 
 class ProgressTracker extends StatelessWidget {
   final List<ProgressItem> progressItems;
@@ -11,8 +13,8 @@ class ProgressTracker extends StatelessWidget {
   Widget build(BuildContext context) {
    return SingleChildScrollView(
       child: Wrap(
-        spacing: 10.0, // Add spacing between elements (optional)
-        runSpacing: 10.0, // Add spacing between rows (optional)
+        spacing: 5.0, 
+        runSpacing: 5.0, 
         children: progressItems.map((item) => _buildProgressItem(item)).toList(),
       ),
     );
@@ -22,22 +24,7 @@ class ProgressTracker extends StatelessWidget {
     return Expanded(
       child: Stack(
         children: [
-          Container(
-            height: 50,
-            width: 100,
-            color: item.color,
-          ),
-          if (item.completed) 
-            Positioned.fill(
-              child: Container(
-                width: (item.currentValue / item.maxValue) * 100, // Adjust width based on current value
-                color: Colors.green, // Adjust color as needed
-              ),
-            ),
-          Text(
-            '${item.title}\n${item.currentValue}/${item.maxValue}',
-            textAlign: TextAlign.center,
-          ),
+          BigCard(item: item,),
         ],
       ),
     );

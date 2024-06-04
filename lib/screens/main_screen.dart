@@ -16,20 +16,15 @@ class MainPage extends StatelessWidget {
      List<ProgressItem> progressItems = [
   ProgressItem(
     title: 'Water',
+    icon: Icons.smoke_free,
     color: Colors.blue,
     currentValue: 9,
     maxValue: 10,
   ),
   ProgressItem(
-    title: 'Yoga',
-    color: Colors.blue,
-    currentValue: 30,
-    maxValue: 30,
-    completed: true, 
-  ),
-  ProgressItem(
     title: 'Study',
     color: Colors.blue,
+    icon: Icons.self_improvement,
     currentValue: 25,
     maxValue: 30,
     completed: false,
@@ -80,74 +75,6 @@ class MainPage extends StatelessWidget {
               ],              
           ),
         ),
-      ),
-    );
-  }
-}
-
-class HabitCard extends StatelessWidget {
-  final Color color;
-  final String title;
-  final String value;
-  final IconData icon;
-
-  HabitCard({required this.color, required this.title, required this.value, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.white),
-          SizedBox(height: 8),
-          Text(
-            title,
-            style: TextStyle(color: Colors.white),
-          ),
-          SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class WaterCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      width: 250,
-      decoration: BoxDecoration(
-        color: Colors.lightBlue[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "water",
-            style: TextStyle(fontSize: 20),
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("glasses: 9 / 10"),
-              Text("max: 17 glasses"),
-            ],
-          ),
-          SizedBox(height: 10),
-          Text("streaks: 10 days"),
-        ],
       ),
     );
   }
