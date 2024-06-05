@@ -3,79 +3,62 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:tracker/data/ProgressItem.dart';
-import 'package:tracker/screens/progress_list.dart';
+import 'package:tracker/data/TimeProgressItem.dart';
+import 'package:tracker/screens/others/habit_card.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
 
- 
+
 
   @override
   Widget build(BuildContext context) {
-     List<ProgressItem> progressItems = [
+CalendarFormat _calendarFormat = CalendarFormat.week;
+       List<ProgressItem> progressItems = [
   ProgressItem(
     title: 'Water',
     icon: Icons.smoke_free,
     color: Colors.blue,
-    currentValue: 9,
-    maxValue: 10,
+    currTimes: 9,
+    Maxtimes: 10,
   ),
   ProgressItem(
     title: 'Study',
     color: Colors.blue,
     icon: Icons.self_improvement,
-    currentValue: 25,
-    maxValue: 30,
+    currTimes: 25,
+    Maxtimes: 30,
     completed: false,
   ),
 
 ];
     return Scaffold(
+      backgroundColor: Color(0xFFF8FAED),
       body: Padding(
-        padding: const EdgeInsets.only(left:20,right:20,top: 40.0),
+        padding: const EdgeInsets.only(top: 40.0,right: 20.0,left: 20.0),
         child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-        
-                Row(
-                
-                  children: [
-                              GFAvatar(),
-                              SizedBox(width: 10,),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                Text("morning," ,style: GoogleFonts.archivo(color:Colors.black45),),
-                                Text("Irimia Mihai",style: GoogleFonts.archivo(fontSize:22,color:Colors.black))
-                              ],),
-                              Spacer(),
-                              GFButton(shape:GFButtonShape.pills,
-                                onPressed:() {
-                                print("add");
-                              },)
-                            ],        
-                  ),
-                  SizedBox(height: 20,),
-                  Divider(color: Colors.black,),
-                  Column(
-                      
-                      crossAxisAlignment:CrossAxisAlignment.start ,
-                      children: [
-                        Text("track" , style: GoogleFonts.archivo(fontSize: 25,color:Colors.black45),),
-                        Text("your habits",style: GoogleFonts.archivo(fontSize: 70,)),
-
-                          // TO DO LIST
-
-                          ProgressTracker(progressItems: progressItems )
-                      ],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                  Text("Hey, Mihai!",style: GoogleFonts.montserrat(color:Colors.black,fontSize:25,)),
+                  SizedBox(height: 25,),
+                  TableCalendar( calendarFormat: _calendarFormat,
+                  headerVisible: false,
+                  pageAnimationCurve: Curves.bounceIn,
+                  headerStyle: HeaderStyle(titleCentered: true),
+                    focusedDay: DateTime.now(),firstDay: DateTime.utc(2024,5,20),lastDay: DateTime.utc(2024,6,20),
                     ),
-              ],              
+                  Text("Go For Daily",style: GoogleFonts.montserrat(color:Colors.black,fontSize:50),),
+                  Text("Wins",style: GoogleFonts.montserrat(color:Colors.green,fontSize:110),),
+                  for(int i=0;i<progressItems.length;i++)
+                    HabitCard(item: progressItems[i])
+            ],
           ),
-        ),
-      ),
-    );
+         ),
+      )
+      );
   }
 }
