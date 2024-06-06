@@ -32,32 +32,58 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
     Maxtimes: 30,
     completed: false,
   ),
-
 ];
+
     return Scaffold(
-      backgroundColor: Color(0xFFF8FAED),
+      bottomNavigationBar:Container(
+        margin: EdgeInsets.symmetric(horizontal: 12.0,vertical: 12.0),
+        decoration: BoxDecoration(
+
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(color: Colors.black,
+            blurRadius: 1,
+            offset: Offset(0,2)
+            )
+          ]
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: BottomNavigationBar(
+
+            items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.hexagon_outlined),label: "" ),
+            BottomNavigationBarItem(icon: Icon(Icons.hexagon_outlined),label: ""),
+          ],),
+        ),
+      ),
+      backgroundColor: Color(0xFFf9fbed),
       body: Padding(
         padding: const EdgeInsets.only(top: 40.0,right: 20.0,left: 20.0),
-        child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                  Text("Hey, Mihai!",style: GoogleFonts.montserrat(color:Colors.black,fontSize:25,)),
-                  SizedBox(height: 25,),
-                  TableCalendar( calendarFormat: _calendarFormat,
-                  headerVisible: false,
-                  pageAnimationCurve: Curves.bounceIn,
-                  headerStyle: HeaderStyle(titleCentered: true),
-                    focusedDay: DateTime.now(),firstDay: DateTime.utc(2024,5,20),lastDay: DateTime.utc(2024,6,20),
-                    ),
-                  Text("Go For Daily",style: GoogleFonts.montserrat(color:Colors.black,fontSize:50),),
-                  Text("Wins",style: GoogleFonts.montserrat(color:Colors.green,fontSize:110),),
-                  for(int i=0;i<progressItems.length;i++)
-                    HabitCard(item: progressItems[i])
-            ],
-          ),
-         ),
+        child: SafeArea(
+          child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    Text("Hey, Mihai!",style: GoogleFonts.montserrat(color:Colors.black,fontSize:25,)),
+                    SizedBox(height: 25,),
+                    TableCalendar( calendarFormat: _calendarFormat,
+                    headerVisible: false,
+                    pageAnimationCurve: Curves.bounceIn,
+                    headerStyle: HeaderStyle(titleCentered: true),
+                      focusedDay: DateTime.now(),firstDay: DateTime.utc(2024,5,20),lastDay: DateTime.utc(2024,6,20),
+                      ),
+                    Text("Go For Daily",style: GoogleFonts.montserrat(color:Colors.black,fontSize:50),),
+                    Text("Wins",style: GoogleFonts.montserrat(color:Colors.green,fontSize:110),),
+                    Divider(),
+                    Text("Habits",style: GoogleFonts.montserrat(color:Colors.black,fontSize:40,letterSpacing:4),),
+                    for(int i=0;i<progressItems.length;i++)
+                      HabitCard(item: progressItems[i]),
+              ],
+            ),
+           ),
+        ),
       )
       );
   }
