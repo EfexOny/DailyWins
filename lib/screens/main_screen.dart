@@ -1,3 +1,4 @@
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -5,14 +6,25 @@ import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tracker/data/ProgressItem.dart';
-import 'package:tracker/data/TimeProgressItem.dart';
 import 'package:tracker/screens/others/habit_card.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
+  @override
+  State<MainPage> createState() => _MainPageState();
 
+}
 
+class _MainPageState extends State<MainPage> {
+  var _selectedTab = _SelectedTab.home;
+
+  void _handleIndexChanged(int i) {
+    setState(() {
+      print(i);
+      _selectedTab = _SelectedTab.values[i];
+    });
+  }
   @override
   Widget build(BuildContext context) {
 CalendarFormat _calendarFormat = CalendarFormat.week;
@@ -35,28 +47,26 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
 ];
 
     return Scaffold(
-      bottomNavigationBar:Container(
-        margin: EdgeInsets.symmetric(horizontal: 12.0,vertical: 12.0),
-        decoration: BoxDecoration(
-
-          borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
-            BoxShadow(color: Colors.black,
-            blurRadius: 1,
-            offset: Offset(0,2)
-            )
-          ]
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: BottomNavigationBar(
-
-            items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.hexagon_outlined),label: "" ),
-            BottomNavigationBarItem(icon: Icon(Icons.hexagon_outlined),label: ""),
+      bottomNavigationBar: DotNavigationBar(
+        marginR: const EdgeInsets.only(bottom: 0, right: 40, left: 40),
+        paddingR: const EdgeInsets.only(bottom: 1, top: 5),
+        itemPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+        currentIndex: _SelectedTab.values.indexOf(_selectedTab),
+        duration: const Duration(milliseconds: 700),
+        backgroundColor: Color(0xFF242424),
+        onTap: _handleIndexChanged,
+        items: [
+            DotNavigationBarItem(
+              icon: Icon(Icons.home),
+              unselectedColor: Color(0xFF58a45c),
+              selectedColor: Colors.white,
+            ),
+            DotNavigationBarItem(
+              icon: Icon(Icons.hexagon),
+              unselectedColor: Color(0xFF58a45c),
+              selectedColor: Colors.white,
+            ),
           ],),
-        ),
-      ),
       backgroundColor: Color(0xFFf9fbed),
       body: Padding(
         padding: const EdgeInsets.only(top: 40.0,right: 20.0,left: 20.0),
@@ -88,3 +98,4 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
       );
   }
 }
+enum _SelectedTab { home, favorite }
