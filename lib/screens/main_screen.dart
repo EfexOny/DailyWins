@@ -109,15 +109,13 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
                     ),
                   Container(
                     color:Color(0xFFf9fbed),
-                    child: Flexible(
-                      child: ListView.builder(
-                        shrinkWrap: true, // Prevent excessive padding
-                        itemCount: progressItems.length,
-                        itemBuilder: (context, index) {
-                          final progressItem = progressItems[index];
-                          return HabitCard(item: progressItem);
-                        },
-                      ),
+                    child: ListView.builder(
+                      shrinkWrap: true, // Prevent excessive padding
+                      itemCount: progressItems.length,
+                      itemBuilder: (context, index) {
+                        final progressItem = progressItems[index];
+                        return HabitCard(item: progressItem);
+                      },
                     ),
                     width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height/4,
                     
