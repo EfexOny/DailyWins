@@ -1,4 +1,5 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -18,9 +19,6 @@ class MainPage extends StatefulWidget {
 
 }
 
-List<Widget> screens = (
-  
-);
 
 class _MainPageState extends State<MainPage> {
   var _selectedTab = _SelectedTab.home;
@@ -50,9 +48,26 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
     Maxtimes: 30,
     completed: false,
   ),
+  ProgressItem(
+    title: 'Run',
+    color: Colors.blue,
+    icon: Icons.self_improvement,
+    currTimes: 25,
+    Maxtimes: 30,
+    completed: false,
+  ),  
+  ProgressItem(
+    title: 'Run',
+    color: Colors.blue,
+    icon: Icons.self_improvement,
+    currTimes: 25,
+    Maxtimes: 30,
+    completed: false,
+  ),  
 ];
 
     return Scaffold(
+
       bottomNavigationBar: GNav(backgroundColor: Color(0xFF222322),
         onTabChange: (i){
           print(i);
@@ -65,7 +80,7 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
       ]),
       backgroundColor: Color(0xFFf9fbed),
       body: Padding(
-        padding: const EdgeInsets.only(top: 40.0,right: 20.0,left: 20.0),
+        padding: const EdgeInsets.only(top: 20.0,right: 20.0,left: 20.0),
         child: SafeArea(
           child: Container(
               child: Column(
@@ -90,8 +105,15 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
                           child: Text("+ New Habit",style: TextStyle(fontSize: 15,color: Colors.black),),onPressed: () => print("Add habit"),),
                       ],
                     ),
-                    for(int i=0;i<progressItems.length;i++)
-                      HabitCard(item: progressItems[i]),
+                 Flexible(child: ListView.builder(
+                    shrinkWrap: true, // Prevent excessive padding
+                    physics: const NeverScrollableScrollPhysics(), // Disable scrolling if needed
+                    itemCount: progressItems.length,
+                    itemBuilder: (context, index) {
+                      final progressItem = progressItems[index];
+                      return HabitCard(item: progressItem);
+                    },
+                  ),)
               ],
             ),
            ),
