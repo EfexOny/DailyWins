@@ -102,18 +102,26 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
                       children: [
                         Text("Habits",style: GoogleFonts.montserrat(color:Colors.black,fontSize:40,letterSpacing:4),),
                         GFButton(shape: GFButtonShape.pills,color: Color(0xFF4ca45c),
-                          child: Text("+ New Habit",style: TextStyle(fontSize: 15,color: Colors.black),),onPressed: () => print("Add habit"),),
+                          child: Text("+ New Habit",style: TextStyle(fontSize: 15,color: Colors.black),),onPressed: () => print("Add habit")
+                          // DO YOUR HIVE Thingie
+                          ,),
                       ],
                     ),
-                 Flexible(child: ListView.builder(
-                    shrinkWrap: true, // Prevent excessive padding
-                    physics: const NeverScrollableScrollPhysics(), // Disable scrolling if needed
-                    itemCount: progressItems.length,
-                    itemBuilder: (context, index) {
-                      final progressItem = progressItems[index];
-                      return HabitCard(item: progressItem);
-                    },
-                  ),)
+                  Container(
+                    color:Color(0xFFf9fbed),
+                    child: Flexible(
+                      child: ListView.builder(
+                        shrinkWrap: true, // Prevent excessive padding
+                        itemCount: progressItems.length,
+                        itemBuilder: (context, index) {
+                          final progressItem = progressItems[index];
+                          return HabitCard(item: progressItem);
+                        },
+                      ),
+                    ),
+                    width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height/4,
+                    
+                  )
               ],
             ),
            ),
