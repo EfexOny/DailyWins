@@ -7,6 +7,7 @@ import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tracker/data/ProgressItem.dart';
 import 'package:tracker/screens/others/habit_card.dart';
@@ -17,11 +18,15 @@ class MainPage extends StatefulWidget {
   @override
   State<MainPage> createState() => _MainPageState();
 
+  
+
 }
 
 
 class _MainPageState extends State<MainPage> {
   var _selectedTab = _SelectedTab.home;
+
+
 
   void _handleIndexChanged(int i) {
     setState(() {
@@ -65,12 +70,14 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
     completed: false,
   ),  
 ];
+var l = Hive.box("users");
 
     return Scaffold(
 
       bottomNavigationBar: GNav(backgroundColor: Color(0xFF222322),
         onTabChange: (i){
           print(i);
+          // l.delete("name");
         },
         gap: 20,
         tabs: [
@@ -87,7 +94,7 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    Text("Hey, Mihai!",style: GoogleFonts.montserrat(color:Colors.black,fontSize:25,)),
+                    Text("Hey, ${l.get("name")}!",style: GoogleFonts.montserrat(color:Colors.black,fontSize:25,)),
                     SizedBox(height: 25,),
                     TableCalendar( calendarFormat: _calendarFormat,
                     headerVisible: false,
@@ -102,7 +109,19 @@ CalendarFormat _calendarFormat = CalendarFormat.week;
                       children: [
                         Text("Habits",style: GoogleFonts.montserrat(color:Colors.black,fontSize:40,letterSpacing:4),),
                         GFButton(shape: GFButtonShape.pills,color: Color(0xFF4ca45c),
-                          child: Text("+ New Habit",style: TextStyle(fontSize: 15,color: Colors.black),),onPressed: () => print("Add habit")
+                          child: Text("+ New Habit",style: TextStyle(fontSize: 15,color: Colors.black),),onPressed: () =>
+                          showDialog(context: context, builder: (context) {
+                              return AlertDialog(title: Text("New Habit"),
+                              content: const SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    TextField(),
+                                    TextField(),
+                                  ],
+                                ),
+                              ),
+                              ); 
+                          },) 
                           // DO YOUR HIVE Thingie
                           ,),
                       ],
