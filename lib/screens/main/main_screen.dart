@@ -164,18 +164,23 @@ class _MainPageState extends State<MainPage> {
                           style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
                         onPressed: () => showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: Text('New Habit'),
-                                  content: Form(
+                          context: context,
+                          builder: (BuildContext context) {
+                            freq _selectedfreq = freq.daily;
+                            action _selectedType = action.times;
+                            return AlertDialog(
+                              backgroundColor: Color(0xFFf9fbed),
+                                title: Text('New Habit'),
+                                content: StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState) {
+                                  return Form(
                                       key: GlobalKey<FormState>(),
                                       child: Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           TextFormField(
                                             controller: _nume,
-                                            decoration: InputDecoration(
-                                                labelText: 'nume'),
+                                            decoration: InputDecoration(labelText: 'Name'),
                                           ),
                                           Row(
                                             children: [
@@ -183,14 +188,11 @@ class _MainPageState extends State<MainPage> {
                                               DropdownButton<freq>(
                                                 value: _selectedfreq,
                                                 onChanged: (freq? newValue) {
-                                                  if (newValue != null) {
-                                                    setState(() {
-                                                      _selectedfreq = newValue;
-                                                    });
-                                                  }
+                                                  setState(() {
+                                                    _selectedfreq = newValue!;
+                                                  });
                                                 },
-                                                items: freq.values
-                                                    .map((freq value) {
+                                                items: freq.values.map((freq value) {
                                                   return DropdownMenuItem<freq>(
                                                     value: value,
                                                     child: Text(value.name),
@@ -205,16 +207,12 @@ class _MainPageState extends State<MainPage> {
                                               DropdownButton<action>(
                                                 value: _selectedType,
                                                 onChanged: (action? newValue) {
-                                                  if (newValue != null) {
-                                                    setState(() {
-                                                      _selectedType = newValue;
-                                                    });
-                                                  }
+                                                  setState(() {
+                                                    _selectedType = newValue!;
+                                                  });
                                                 },
-                                                items: action.values
-                                                    .map((action value) {
-                                                  return DropdownMenuItem<
-                                                      action>(
+                                                items: action.values.map((action value) {
+                                                  return DropdownMenuItem<action>(
                                                     value: value,
                                                     child: Text(value.name),
                                                   );
@@ -225,6 +223,7 @@ class _MainPageState extends State<MainPage> {
                                           GFButton(
                                               child: Text("Add"),
                                               onPressed: () {
+                                                // TO DO: PUT THE DATA IN THE BOX GODDAMIT
                                                 print(_nume.text.trim() +
                                                     " " +
                                                     _selectedfreq.toString() +
@@ -232,9 +231,10 @@ class _MainPageState extends State<MainPage> {
                                                     _selectedType.toString());
                                               })
                                         ],
-                                      )));
-                            }),
-                      )
+                                      ));
+                                }));
+                          }),
+                    )
                     ],
                   ),
                   Container(
@@ -263,7 +263,9 @@ enum _SelectedTab { home, favorite }
 List<int> zile = [13, 14, 15];
 
 Widget _customDayBuilder(context, day) {
-  // TO DO: compare the list of the days with this BRO WTF
+  // TO DO: take the days array of the hive box of the habits
+
+
 
   final isDays = zile.contains(day.day);
 
