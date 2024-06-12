@@ -9,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:tracker/screens/data/database.dart';
+import 'package:tracker/screens/data/habit.dart';
 import 'package:tracker/screens/others/habit_card.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,11 +19,6 @@ class MainPage extends StatefulWidget {
   @override
   State<MainPage> createState() => _MainPageState();
 }
-
-List habits = [
-  ['Mancat', 43, "Daily", "Times","skipped"],
-  ['Spalat', 1, "Daily", "Minutes","done"],
-];
 
 enum freq { daily, weekly }
 
@@ -36,6 +33,22 @@ final _nume = TextEditingController();
 
 class _MainPageState extends State<MainPage> {
   var _selectedTab = _SelectedTab.home;
+
+  final _myBox = Hive.box('mybox');
+  ToDoDataBase db = ToDoDataBase();
+
+  @override
+  void initState() {
+    // if this is the 1st time ever openin the app, then create default data
+    if (_myBox.get("TODOLIST") == null) {
+      db.createInitialData();
+    } else {
+      // there already exists data
+      db.loadData();
+    }
+
+    super.initState();
+  }
 
   void _handleIndexChanged(int i) {
     setState(() {
@@ -208,14 +221,17 @@ class _MainPageState extends State<MainPage> {
                                                 child: Text("Add"),
                                                 onPressed: () async {
                                                   // TO DO: PUT THE DATA IN THE BOX GODDAMIT
-                                                  int amm = int.parse(_amount.text);
-                                                  habits.add([
-                                                    _nume.text.trim(),
-                                                    amm,
-                                                    _selectedfreq.name,
-                                                    _selectedType.name,
-                                                    ""
-                                                  ]);
+                                                  int amm =
+                                                      int.parse(_amount.text);
+
+                                                  db.toDoList.add([
+                                                      _nume.text.trim(),
+                                                       amm,
+                                                      _selectedfreq.name,
+                                                      _selectedType.name,
+                                                       ""]);
+
+                                                  db.updateDataBase();
                                                 })
                                           ],
                                         ));
@@ -228,31 +244,36 @@ class _MainPageState extends State<MainPage> {
                     color: Color(0xFFf9fbed),
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: habits.length,
+                      itemCount: db.toDoList.length,
                       itemBuilder: (context, index) {
-                        return Slidable(direction: Axis.horizontal,
-                          endActionPane: ActionPane(motion: StretchMotion(), children: [
+                        return Slidable(
+                          direction: Axis.horizontal,
+                          closeOnScroll: true,
+                          endActionPane:
+                              ActionPane(motion: StretchMotion(), children: [
                             SlidableAction(
-                                borderRadius: BorderRadius.circular(20),
-                                backgroundColor: Colors.blue,
+                              borderRadius: BorderRadius.circular(20),
+                              backgroundColor: Colors.blue,
                               icon: Icons.skip_next_rounded,
-                              onPressed: (context) => print("skip"),)
+                              onPressed: (context) => print("skip"),
+                            )
                           ]),
-                          startActionPane: ActionPane(motion: StretchMotion(),
+                          startActionPane: ActionPane(
+                            motion: StretchMotion(),
                             children: [
                               SlidableAction(
-                                borderRadius: BorderRadius.circular(20),
-                                backgroundColor: Colors.green,
-                              icon: Icons.done_rounded,
-                                onPressed: (context) => print("done"))
-                            ],                          
+                                  borderRadius: BorderRadius.circular(20),
+                                  backgroundColor: Colors.green,
+                                  icon: Icons.done_rounded,
+                                  onPressed: (context) => print("done"))
+                            ],
                           ),
                           child: HabitCard(
-                            status: habits[index][4],
-                            amount: habits[index][1],
-                            freq: habits[index][2],
-                            name: habits[index][0],
-                            type: habits[index][3],
+                            status: db.toDoList[index][4],
+                            amount: db.toDoList[index][1],
+                            freq: db.toDoList[index][2],
+                            name: db.toDoList[index][0],
+                            type: db.toDoList[index][3],
                           ),
                         );
                       },
@@ -280,7 +301,6 @@ Widget _customDayBuilder(context, day) {
   final color = isDays ? Colors.green : Colors.grey;
 
   return Container(
-    decoration:
-        BoxDecoration(borderRadius: BorderRadius.circular(12), color: color),
-  );
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(12), color: color));
 }
