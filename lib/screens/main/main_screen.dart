@@ -1,19 +1,14 @@
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:tracker/data/ProgressItem.dart';
-import 'package:tracker/screens/data/DataService.dart';
-import 'package:tracker/screens/data/actionType.dart';
-import 'package:tracker/screens/data/freqType.dart';
-import 'package:tracker/screens/data/habit.dart';
 import 'package:tracker/screens/others/habit_card.dart';
 
 class MainPage extends StatefulWidget {
@@ -23,6 +18,11 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
+List habits = [
+  ['Mancat', 43, "Daily", "Times","skipped"],
+  ['Spalat', 1, "Daily", "Minutes","done"],
+];
+
 enum freq { daily, weekly }
 
 freq _selectedfreq = freq.daily;
@@ -30,9 +30,9 @@ freq _selectedfreq = freq.daily;
 enum action { times, minutes }
 
 action _selectedType = action.times;
+final _amount = TextEditingController();
 
 final _nume = TextEditingController();
-final DataService _habitService = DataService();
 
 class _MainPageState extends State<MainPage> {
   var _selectedTab = _SelectedTab.home;
@@ -47,39 +47,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     CalendarFormat _calendarFormat = CalendarFormat.week;
-    List<ProgressItem> progressItems = [
-      ProgressItem(
-        title: 'Water',
-        icon: Icons.smoke_free,
-        color: Colors.blue,
-        currTimes: 9,
-        Maxtimes: 10,
-      ),
-      ProgressItem(
-        title: 'Study',
-        color: Colors.blue,
-        icon: Icons.self_improvement,
-        currTimes: 25,
-        Maxtimes: 30,
-        completed: false,
-      ),
-      ProgressItem(
-        title: 'Run',
-        color: Colors.blue,
-        icon: Icons.self_improvement,
-        currTimes: 25,
-        Maxtimes: 30,
-        completed: false,
-      ),
-      ProgressItem(
-        title: 'Run',
-        color: Colors.blue,
-        icon: Icons.self_improvement,
-        currTimes: 25,
-        Maxtimes: 30,
-        completed: false,
-      ),
-    ];
     var l = Hive.box("users");
 
     return Scaffold(
@@ -189,6 +156,11 @@ class _MainPageState extends State<MainPage> {
                                               decoration: InputDecoration(
                                                   labelText: 'Name'),
                                             ),
+                                            TextFormField(
+                                              controller: _amount,
+                                              decoration: InputDecoration(
+                                                  labelText: 'Minutes/Times'),
+                                            ),
                                             Row(
                                               children: [
                                                 Text("Habit Frequency: "),
@@ -236,15 +208,14 @@ class _MainPageState extends State<MainPage> {
                                                 child: Text("Add"),
                                                 onPressed: () async {
                                                   // TO DO: PUT THE DATA IN THE BOX GODDAMIT
-                                                  List<int> days = [14, 15];
-                                                  var habit = Habits(
-                                                      days: days,
-                                                      type: _selectedType.name,
-                                                      actiontype:
-                                                          _selectedfreq.name);
-                                                  _habitService.addHabit(habit);
-
-                                                  
+                                                  int amm = int.parse(_amount.text);
+                                                  habits.add([
+                                                    _nume.text.trim(),
+                                                    amm,
+                                                    _selectedfreq.name,
+                                                    _selectedType.name,
+                                                    ""
+                                                  ]);
                                                 })
                                           ],
                                         ));
@@ -257,10 +228,33 @@ class _MainPageState extends State<MainPage> {
                     color: Color(0xFFf9fbed),
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: progressItems.length,
+                      itemCount: habits.length,
                       itemBuilder: (context, index) {
-                        final progressItem = progressItems[index];
-                        return HabitCard(item: progressItem);
+                        return Slidable(direction: Axis.horizontal,
+                          endActionPane: ActionPane(motion: StretchMotion(), children: [
+                            SlidableAction(
+                                borderRadius: BorderRadius.circular(20),
+                                backgroundColor: Colors.blue,
+                              icon: Icons.skip_next_rounded,
+                              onPressed: (context) => print("skip"),)
+                          ]),
+                          startActionPane: ActionPane(motion: StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                borderRadius: BorderRadius.circular(20),
+                                backgroundColor: Colors.green,
+                              icon: Icons.done_rounded,
+                                onPressed: (context) => print("done"))
+                            ],                          
+                          ),
+                          child: HabitCard(
+                            status: habits[index][4],
+                            amount: habits[index][1],
+                            freq: habits[index][2],
+                            name: habits[index][0],
+                            type: habits[index][3],
+                          ),
+                        );
                       },
                     ),
                     width: MediaQuery.of(context).size.width,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tracker/screens/conditional_screen.dart';
+import 'package:tracker/screens/others/conditional_screen.dart';
 
 class IntroductoryPage extends StatefulWidget {
   const IntroductoryPage({super.key});
