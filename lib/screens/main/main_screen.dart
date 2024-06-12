@@ -10,6 +10,10 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tracker/data/ProgressItem.dart';
+import 'package:tracker/screens/data/DataService.dart';
+import 'package:tracker/screens/data/actionType.dart';
+import 'package:tracker/screens/data/freqType.dart';
+import 'package:tracker/screens/data/habit.dart';
 import 'package:tracker/screens/others/habit_card.dart';
 
 class MainPage extends StatefulWidget {
@@ -28,6 +32,7 @@ enum action { times, minutes }
 action _selectedType = action.times;
 
 final _nume = TextEditingController();
+final DataService _habitService = DataService();
 
 class _MainPageState extends State<MainPage> {
   var _selectedTab = _SelectedTab.home;
@@ -164,77 +169,88 @@ class _MainPageState extends State<MainPage> {
                           style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
                         onPressed: () => showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            freq _selectedfreq = freq.daily;
-                            action _selectedType = action.times;
-                            return AlertDialog(
-                              backgroundColor: Color(0xFFf9fbed),
-                                title: Text('New Habit'),
-                                content: StatefulBuilder(
-                                    builder: (BuildContext context, StateSetter setState) {
-                                  return Form(
-                                      key: GlobalKey<FormState>(),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          TextFormField(
-                                            controller: _nume,
-                                            decoration: InputDecoration(labelText: 'Name'),
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text("Habit Frequency: "),
-                                              DropdownButton<freq>(
-                                                value: _selectedfreq,
-                                                onChanged: (freq? newValue) {
-                                                  setState(() {
-                                                    _selectedfreq = newValue!;
-                                                  });
-                                                },
-                                                items: freq.values.map((freq value) {
-                                                  return DropdownMenuItem<freq>(
-                                                    value: value,
-                                                    child: Text(value.name),
-                                                  );
-                                                }).toList(),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text("Action Type: "),
-                                              DropdownButton<action>(
-                                                value: _selectedType,
-                                                onChanged: (action? newValue) {
-                                                  setState(() {
-                                                    _selectedType = newValue!;
-                                                  });
-                                                },
-                                                items: action.values.map((action value) {
-                                                  return DropdownMenuItem<action>(
-                                                    value: value,
-                                                    child: Text(value.name),
-                                                  );
-                                                }).toList(),
-                                              )
-                                            ],
-                                          ),
-                                          GFButton(
-                                              child: Text("Add"),
-                                              onPressed: () {
-                                                // TO DO: PUT THE DATA IN THE BOX GODDAMIT
-                                                print(_nume.text.trim() +
-                                                    " " +
-                                                    _selectedfreq.toString() +
-                                                    " " +
-                                                    _selectedType.toString());
-                                              })
-                                        ],
-                                      ));
-                                }));
-                          }),
-                    )
+                            context: context,
+                            builder: (BuildContext context) {
+                              freq _selectedfreq = freq.daily;
+                              action _selectedType = action.times;
+                              return AlertDialog(
+                                  backgroundColor: Color(0xFFf9fbed),
+                                  title: Text('New Habit'),
+                                  content: StatefulBuilder(builder:
+                                      (BuildContext context,
+                                          StateSetter setState) {
+                                    return Form(
+                                        key: GlobalKey<FormState>(),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TextFormField(
+                                              controller: _nume,
+                                              decoration: InputDecoration(
+                                                  labelText: 'Name'),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text("Habit Frequency: "),
+                                                DropdownButton<freq>(
+                                                  value: _selectedfreq,
+                                                  onChanged: (freq? newValue) {
+                                                    setState(() {
+                                                      _selectedfreq = newValue!;
+                                                    });
+                                                  },
+                                                  items: freq.values
+                                                      .map((freq value) {
+                                                    return DropdownMenuItem<
+                                                        freq>(
+                                                      value: value,
+                                                      child: Text(value.name),
+                                                    );
+                                                  }).toList(),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text("Action Type: "),
+                                                DropdownButton<action>(
+                                                  value: _selectedType,
+                                                  onChanged:
+                                                      (action? newValue) {
+                                                    setState(() {
+                                                      _selectedType = newValue!;
+                                                    });
+                                                  },
+                                                  items: action.values
+                                                      .map((action value) {
+                                                    return DropdownMenuItem<
+                                                        action>(
+                                                      value: value,
+                                                      child: Text(value.name),
+                                                    );
+                                                  }).toList(),
+                                                )
+                                              ],
+                                            ),
+                                            GFButton(
+                                                child: Text("Add"),
+                                                onPressed: () async {
+                                                  // TO DO: PUT THE DATA IN THE BOX GODDAMIT
+                                                  List<int> days = [14, 15];
+                                                  var habit = Habits(
+                                                      days: days,
+                                                      type: _selectedType.name,
+                                                      actiontype:
+                                                          _selectedfreq.name);
+                                                  _habitService.addHabit(habit);
+
+                                                  
+                                                })
+                                          ],
+                                        ));
+                                  }));
+                            }),
+                      )
                     ],
                   ),
                   Container(
@@ -264,8 +280,6 @@ List<int> zile = [13, 14, 15];
 
 Widget _customDayBuilder(context, day) {
   // TO DO: take the days array of the hive box of the habits
-
-
 
   final isDays = zile.contains(day.day);
 

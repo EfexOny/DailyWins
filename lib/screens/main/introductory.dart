@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tracker/screens/conditional_screen.dart';
 
@@ -19,7 +17,7 @@ class _IntroductoryPageState extends State<IntroductoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFf9fbed),
+      backgroundColor: const Color(0xFFf9fbed),
       body: Container(
         child: Column(mainAxisAlignment: MainAxisAlignment.center,
           children: [

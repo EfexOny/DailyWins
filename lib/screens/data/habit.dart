@@ -7,10 +7,10 @@ part 'habit.g.dart';
 @HiveType(typeId: 4)
 class Habits {
   @HiveField(0)
-  freqType type;
+  String type;
 
   @HiveField(1)
-  actionType actiontype;
+  String actiontype;
 
   @HiveField(2)
   List<int> days;

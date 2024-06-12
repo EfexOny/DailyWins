@@ -10,10 +10,9 @@ import 'package:tracker/screens/main/main_screen.dart';
 void  main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
-  Hive.registerAdapter(freqTypeAdapter());
-  Hive.registerAdapter(actionTypeAdapter());
   Hive.registerAdapter(HabitsAdapter());
   var users = await Hive.openBox("users");
+  await Hive.openBox<Habits>('habits');
 
   runApp(const MyApp());
 }
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData( 
         useMaterial3: true,
       ),
-      home: ConditionalScreen(),
+      home: const ConditionalScreen(),
     );
   }
 }

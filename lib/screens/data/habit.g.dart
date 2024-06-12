@@ -18,8 +18,8 @@ class HabitsAdapter extends TypeAdapter<Habits> {
     };
     return Habits(
       days: (fields[2] as List).cast<int>(),
-      type: fields[0] as freqType,
-      actiontype: fields[1] as actionType,
+      type: fields[0] as String,
+      actiontype: fields[1] as String,
     );
   }
 
