@@ -10,7 +10,7 @@ class ToDoDataBase {
   void createInitialData() {
     toDoList = [
      ['Mancat', 43, "Daily", "Times","skipped"],
-  ['Spalat', 1, "Daily", "Minutes","done"],
+     ['Spalat', 1, "Daily", "Minutes","done"],
     ];
   }
 

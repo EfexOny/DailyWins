@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tracker/data/ProgressItem.dart';
 
 class HabitCard extends StatelessWidget {
   final String name;

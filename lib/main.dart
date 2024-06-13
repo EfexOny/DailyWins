@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tracker/screens/data/gemini.dart';
 import 'package:tracker/screens/data/habit.dart';
 import 'package:tracker/screens/others/conditional_screen.dart';
 import 'package:tracker/screens/data/user.dart';
 import 'package:tracker/screens/main/main_screen.dart';
 
 void main() async {
+  Gemini.init(apiKey: api);
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   var users = await Hive.openBox("users");
