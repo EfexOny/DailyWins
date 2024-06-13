@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:tracker/screens/data/gemini.dart';
-import 'package:tracker/screens/data/habit.dart';
 import 'package:tracker/screens/others/conditional_screen.dart';
 import 'package:tracker/screens/data/user.dart';
-import 'package:tracker/screens/main/main_screen.dart';
 
 void main() async {
-  Gemini.init(apiKey: api);
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   var users = await Hive.openBox("users");
@@ -22,11 +18,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
+    return ScreenUtilInit(
+      child: MaterialApp(
+        theme: ThemeData(
+          useMaterial3: true,
+        ),
+        home: const ConditionalScreen(),
       ),
-      home: const ConditionalScreen(),
+      designSize: Size(1080, 2220),
     );
   }
 }

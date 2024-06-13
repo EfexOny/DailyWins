@@ -9,8 +9,8 @@ class ToDoDataBase {
   // run this method if this is the 1st time ever opening this app
   void createInitialData() {
     toDoList = [
-     ['Mancat', 43, "Daily", "Times","skipped"],
-     ['Spalat', 1, "Daily", "Minutes","done"],
+     ['Mancat', 43, "Daily", "Times","skipped",[14,15]],
+     ['Spalat', 1, "Daily", "Minutes","done",[]],
     ];
   }
 

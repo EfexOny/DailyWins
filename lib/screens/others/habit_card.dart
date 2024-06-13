@@ -27,7 +27,7 @@ class HabitCard extends StatelessWidget {
             blurRadius: 7,
             offset: Offset(0, 3), // changes position of shadow
           ),
-        ], color: Color(0xFFf8f4e4), borderRadius: BorderRadius.circular(12)),
+        ], color: status == "skipped" ? Colors.white54 :  Color(0xFFf8f4e4), borderRadius: BorderRadius.circular(12)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,6 +76,13 @@ class HabitCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Object statusOverr(String status) {
+  if (status == "skipped")
+    return Colors.white38;
+  else
+    return Color(0xFFf8f4e4);
 }
 
 Widget typeSelect(String type) {

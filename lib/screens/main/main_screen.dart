@@ -9,8 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:tracker/screens/components/HabitScreen.dart';
 import 'package:tracker/screens/data/database.dart';
-import 'package:tracker/screens/data/habit.dart';
 import 'package:tracker/screens/others/habit_card.dart';
 
 class MainPage extends StatefulWidget {
@@ -39,11 +39,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    // if this is the 1st time ever openin the app, then create default data
     if (_myBox.get("TODOLIST") == null) {
       db.createInitialData();
     } else {
-      // there already exists data
       db.loadData();
     }
 
@@ -220,18 +218,22 @@ class _MainPageState extends State<MainPage> {
                                             GFButton(
                                                 child: Text("Add"),
                                                 onPressed: () async {
-                                                  // TO DO: PUT THE DATA IN THE BOX GODDAMIT
-                                                  int amm =
-                                                      int.parse(_amount.text);
+                                                  setState(() {
+                                                    // TO DO: PUT THE DATA IN THE BOX GODDAMIT
+                                                    int amm =
+                                                        int.parse(_amount.text);
 
-                                                  db.toDoList.add([
+                                                    db.toDoList.add([
                                                       _nume.text.trim(),
-                                                       amm,
+                                                      amm,
                                                       _selectedfreq.name,
                                                       _selectedType.name,
-                                                       ""]);
+                                                      "",
+                                                      []
+                                                    ]);
 
-                                                  db.updateDataBase();
+                                                    db.updateDataBase();
+                                                  });
                                                 })
                                           ],
                                         ));
@@ -252,28 +254,40 @@ class _MainPageState extends State<MainPage> {
                           endActionPane:
                               ActionPane(motion: StretchMotion(), children: [
                             SlidableAction(
-                              borderRadius: BorderRadius.circular(20),
-                              backgroundColor: Colors.blue,
-                              icon: Icons.skip_next_rounded,
-                              onPressed: (context) => print("skip"),
-                            )
+                                borderRadius: BorderRadius.circular(20),
+                                backgroundColor: Colors.red,
+                                icon: Icons.delete,
+                                onPressed: (context) => setState(() {
+                                      db.toDoList.removeAt(index);
+                                    }))
                           ]),
                           startActionPane: ActionPane(
                             motion: StretchMotion(),
                             children: [
                               SlidableAction(
                                   borderRadius: BorderRadius.circular(20),
-                                  backgroundColor: Colors.green,
-                                  icon: Icons.done_rounded,
-                                  onPressed: (context) => print("done"))
+                                  backgroundColor: db.toDoList[index][4] == "skipped"? Colors.green : Colors.blue,
+                                  icon: db.toDoList[index][4] == "skipped" ? Icons.skip_previous_rounded : Icons.skip_next_rounded ,
+                                  onPressed: (context) => setState(() {
+                                        db.toDoList[index][4] == "skipped" ? db.toDoList[index][4] == "" :db.toDoList[index][4] == "skipped"  ;
+                                      }))
                             ],
                           ),
-                          child: HabitCard(
-                            status: db.toDoList[index][4],
-                            amount: db.toDoList[index][1],
-                            freq: db.toDoList[index][2],
-                            name: db.toDoList[index][0],
-                            type: db.toDoList[index][3],
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HabitPoweredScreen(
+                                          name: db.toDoList[index][0],
+                                          Days: db.toDoList[index][5],
+                                        ))),
+                            child: HabitCard(
+                              status: db.toDoList[index][4],
+                              amount: db.toDoList[index][1],
+                              freq: db.toDoList[index][2],
+                              name: db.toDoList[index][0],
+                              type: db.toDoList[index][3],
+                            ),
                           ),
                         );
                       },
