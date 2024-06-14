@@ -105,19 +105,6 @@ class _MainPageState extends State<MainPage> {
                   SizedBox(
                     height: 25,
                   ),
-                  TableCalendar(
-                    calendarBuilders: CalendarBuilders(
-                      dowBuilder: (context, day) =>
-                          _customDayBuilder(context, day),
-                    ),
-                    calendarFormat: _calendarFormat,
-                    headerVisible: false,
-                    pageAnimationCurve: Curves.bounceIn,
-                    headerStyle: HeaderStyle(titleCentered: true),
-                    focusedDay: DateTime.now(),
-                    firstDay: DateTime.utc(2024, 5, 20),
-                    lastDay: DateTime.utc(2024, 6, 20),
-                  ),
                   Text(
                     "Go For Daily",
                     style: GoogleFonts.montserrat(
@@ -231,7 +218,6 @@ class _MainPageState extends State<MainPage> {
                                                       "",
                                                       []
                                                     ]);
-
                                                     db.updateDataBase();
                                                   });
                                                 })
@@ -259,6 +245,7 @@ class _MainPageState extends State<MainPage> {
                                 icon: Icons.delete,
                                 onPressed: (context) => setState(() {
                                       db.toDoList.removeAt(index);
+                                      db.updateDataBase();
                                     }))
                           ]),
                           startActionPane: ActionPane(
@@ -266,10 +253,14 @@ class _MainPageState extends State<MainPage> {
                             children: [
                               SlidableAction(
                                   borderRadius: BorderRadius.circular(20),
-                                  backgroundColor: db.toDoList[index][4] == "skipped"? Colors.green : Colors.blue,
-                                  icon: db.toDoList[index][4] == "skipped" ? Icons.skip_previous_rounded : Icons.skip_next_rounded ,
+                                  backgroundColor:db.toDoList[index][4] == "skipped"? Colors.green : Colors.blue,
+                                  icon: db.toDoList[index][4] == "skipped" ? Icons.skip_previous_rounded : Icons.skip_next_rounded,
                                   onPressed: (context) => setState(() {
-                                        db.toDoList[index][4] == "skipped" ? db.toDoList[index][4] == "" :db.toDoList[index][4] == "skipped"  ;
+                                        if (db.toDoList[index][4] != "skipped")
+                                          db.toDoList[index][4] = "skipped";
+                                        else
+                                          db.toDoList[index][4] = "";
+                                        print(db.toDoList[index][4]);
                                       }))
                             ],
                           ),
@@ -280,6 +271,7 @@ class _MainPageState extends State<MainPage> {
                                     builder: (context) => HabitPoweredScreen(
                                           name: db.toDoList[index][0],
                                           Days: db.toDoList[index][5],
+                                          minutes: db.toDoList[index][1],
                                         ))),
                             child: HabitCard(
                               status: db.toDoList[index][4],
