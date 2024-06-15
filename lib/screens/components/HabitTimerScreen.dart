@@ -8,21 +8,25 @@ import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class HabitPoweredScreen extends StatefulWidget {
+class HabitTimerScreen extends StatefulWidget {
   final String name;
   final Days;
   final int minutes;
-  const HabitPoweredScreen(
+  final String status;
+  const HabitTimerScreen(
       {super.key,
+      required this.status,
       required this.name,
       required this.minutes,
       required this.Days});
 
   @override
-  State<HabitPoweredScreen> createState() => _HabitPoweredScreenState();
+  State<HabitTimerScreen> createState() => _HabitPoweredScreenState();
 }
 
-class _HabitPoweredScreenState extends State<HabitPoweredScreen> {
+bool started = false;
+
+class _HabitPoweredScreenState extends State<HabitTimerScreen> {
   late int minutesLeft = widget.minutes;
   late List Days = widget.Days;
 
@@ -33,6 +37,9 @@ class _HabitPoweredScreenState extends State<HabitPoweredScreen> {
           minutesLeft--;
         });
       } else {
+        setState(() {
+          started = false;
+        });
         timer.cancel();
       }
     });
@@ -84,22 +91,39 @@ class _HabitPoweredScreenState extends State<HabitPoweredScreen> {
                 SizedBox(
                   height: 300,
                 ),
-                Text(minutesLeft.toString()),
+                Text(
+                  minutesLeft.toString(),
+                  style: GoogleFonts.montserrat(fontSize: 40),
+                ),
+                Spacer(),
                 GFButton(
+                  fullWidthButton: true,
                   onPressed: () {
                     if (minutesLeft > 0) {
-                      
                       setState(() {
+                        started = true;
                         _startTimer();
                       });
                     } else {
                       // Days.clear;
                       setState(() {
-                      Days.add(DateTime.now().day);
+                        Days.add(DateTime.now().day);
+                        started = false;
                       });
                     }
                   },
-                  child: Text(minutesLeft == 0 ? "Done" : "Start"),
+                  child: Text(
+                      !started
+                          ? "Start"
+                          : minutesLeft <= 0
+                              ? "Done"
+                              : "Counting...",
+                      style: GoogleFonts.montserrat(fontSize: 25)),
+                  color: started
+                      ? Colors.blue
+                      : minutesLeft == 0
+                          ? Colors.green
+                          : Colors.black,
                   shape: GFButtonShape.pills,
                 )
               ],
@@ -119,4 +143,12 @@ class _HabitPoweredScreenState extends State<HabitPoweredScreen> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12), color: color));
   }
+
+}
+
+bool checkDay(List zile) {
+  if (zile.contains(DateTime.now().day))
+    return true;
+  else
+    return false;
 }

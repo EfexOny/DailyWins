@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:tracker/screens/components/HabitScreen.dart';
+import 'package:tracker/screens/components/HabitTimerScreen.dart';
 import 'package:tracker/screens/data/database.dart';
 import 'package:tracker/screens/others/habit_card.dart';
 
@@ -268,10 +268,11 @@ class _MainPageState extends State<MainPage> {
                             onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HabitPoweredScreen(
+                                    builder: (context) => HabitTimerScreen(
                                           name: db.toDoList[index][0],
                                           Days: db.toDoList[index][5],
                                           minutes: db.toDoList[index][1],
+                                          status: db.toDoList[index][4] ,
                                         ))),
                             child: HabitCard(
                               status: db.toDoList[index][4],
